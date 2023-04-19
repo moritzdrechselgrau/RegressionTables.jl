@@ -85,6 +85,7 @@ function regtable(rr::Union{FixedEffectModel,TableRegressionModel,RegressionMode
     fixedeffects::Vector{String} = Vector{String}(),
     labels::Dict{String,String} = Dict{String,String}(),
     align::Symbol = :r,
+    overlay::Bool = false,
     estimformat::String = "%0.3f",
     estim_decoration::Function = make_estim_decorator([0.001, 0.01, 0.05]),
     statisticformat::String = "%0.3f",
@@ -443,6 +444,12 @@ function regtable(rr::Union{FixedEffectModel,TableRegressionModel,RegressionMode
         error("`align` keyword needs to be one of [:r,:c,:l]")
     end
     align_results = "l" * (string(align) ^ numberOfResults)
+    if overlay
+        align_results = "l"
+        for i = 1:numberOfResults
+            align_results *= string(align) * "<{\onslide<+->}"
+        end
+    end
 
     bodyBlocks = [estimateBlock]
 
